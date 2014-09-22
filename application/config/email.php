@@ -1,0 +1,2 @@
+<?php
+$config['mailtype'] = 'html';
