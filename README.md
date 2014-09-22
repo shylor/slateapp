@@ -1,4 +1,4 @@
-slateapp
+Slate App
 ========
 
 Slate is a Basic Web Framework built above CodeIgniter.
@@ -9,6 +9,7 @@ Slate is a Basic Web Framework built above CodeIgniter.
 2. Setup URL Rewriting depending on the server you have. (see below)
 4. Import slate.sql into your database.
 5. configure applications/config/database.php to match your mysql setup.
+6. configure applications/config/slate.php.
 6. Start coding.
 
 ## Contact
