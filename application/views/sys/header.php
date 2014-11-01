@@ -5,10 +5,10 @@
     <title></title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/css/verek.css">
+    <link rel="stylesheet" href="/assets/css/slate.css">
   </head>
   <body>
-  
+
     <?php if(isset($msg_type)): ?>
       <div class="container">
         <div class="row">
