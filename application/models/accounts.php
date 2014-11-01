@@ -36,13 +36,15 @@ class Accounts extends CI_Model {
 
   public function signup() {
     $email_code = md5($this->input->post('email1').time());
+    $pass_salt  = md5(rand(1,5000).rand(1,5000));
 
     $user = array(
-      'eid' => md5($this->input->post('username').time()).md5(time().$this->input->post('username')),
-      'username' => $this->input->post('username'),
-      'email' => $this->input->post('email1'),
-      'access' => 1,
-      'password' => $this->_hash_password($this->input->post('password1')),
+      'eid'        => md5($this->input->post('username').time()).md5(time().$this->input->post('username')),
+      'username'   => $this->input->post('username'),
+      'email'      => $this->input->post('email1'),
+      'access'     => 1,
+      'password'   => $this->_hash_password($this->input->post('password1'), $pass_salt),
+      'salt'       => $pass_salt,
       'email_code' => $email_code
     );
 
@@ -55,8 +57,7 @@ class Accounts extends CI_Model {
 
   public function signin() {
     $user = array(
-      'username' => $this->input->post('username'),
-      'password' => $this->_hash_password($this->input->post('password'))
+      'username' => $this->input->post('username')
     );
 
     $query['account'] = $this->db->get_where('accounts', $user);
@@ -64,19 +65,23 @@ class Accounts extends CI_Model {
     if($query['account']->num_rows() == 1) {
       $user = $query['account']->row();
 
-      if($user->access != 0 && $user->email_confirm != 0) {
-        $this->session->set_userdata(array('online'=>true,'uid'=>$user->id));
-        if($this->input->post('remember') == 'on') {
-          $cookie_code = $this->_set_cookie($user->id);
-          return $cookie_code;
+      if($this->_hash_password($this->input->post('password'), $user->salt) == $user->password) {
+        if($user->access != 0 && $user->email_confirm != 0) {
+          $this->session->set_userdata(array('online'=>true,'uid'=>$user->id));
+          if($this->input->post('remember') == 'on') {
+            $cookie_code = $this->_set_cookie($user->id);
+            return $cookie_code;
+          } else {
+            return 'off'; // remember cookie not set
+          }
         } else {
-          return 'off';
+          return false; // blocked or did not confirm yet
         }
       } else {
-        return false;
+        return false; // password salt check
       }
     } else {
-      return false;
+      return false; // no account found
     }
   }
 
@@ -109,8 +114,11 @@ class Accounts extends CI_Model {
   }
 
   public function reset($code) {
+    $pass_salt  = md5(rand(1,5000).rand(1,5000));
+
     $user = array(
-      'password' => $this->_hash_password($this->input->post('password1'))
+      'password' => $this->_hash_password($this->input->post('password1'), $pass_salt),
+      'salt'     => $pass_salt
     );
 
     $this->db->where('email_code', $code);
@@ -159,8 +167,10 @@ class Accounts extends CI_Model {
   }
 
   public function change_password($uid, $password) {
+    $pass_salt  = md5(rand(1,5000).rand(1,5000));
+
     $this->db->where('id', $uid);
-    $this->db->update('accounts', array('password'=>$this->_hash_password($password)));
+    $this->db->update('accounts', array('password'=>$this->_hash_password($password, $pass_salt)));
 
     if($this->db->affected_rows() == 1) {
       return true;
@@ -176,12 +186,12 @@ class Accounts extends CI_Model {
     return $code;
   }
 
-  private function _hash_password($password) {
+  private function _hash_password($password, $salt) {
     $code_1 = $this->config->item('password_code_1');
     $code_2 = $this->config->item('password_code_2');
     $code_3 = $this->config->item('password_code_3');
     $code_4 = $this->config->item('password_code_4');
-    return md5(md5($password.$code_3).md5($password.$code_1).$password).md5(md5($password.$code_4).md5($password.$code_2).$password);
+    return md5(md5($password.$code_3.$salt).md5($salt.$password.$code_1).$password).md5(md5($password.$salt.$code_4).md5($password.$code_2.$salt).$password);
   }
 
 }
