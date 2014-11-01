@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `eid` varchar(64) NOT NULL,
   `username` varchar(24) NOT NULL,
   `email` varchar(128) NOT NULL,
+  `salt` varchar(32) NOT NULL,
   `access` tinyint(4) NOT NULL,
   `password` varchar(64) NOT NULL,
   `email_confirm` tinyint(1) NOT NULL,
