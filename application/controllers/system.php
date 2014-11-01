@@ -7,7 +7,7 @@ class System extends CI_Controller {
       $this->load->library('form_validation');
 
       $this->form_validation->set_rules('username', 'username', 'required|max_length[24]|min_length[3]|is_unique[accounts.username]|alpha_numeric');
-      $this->form_validation->set_rules('email1', 'email', 'required|max_length[128]|is_unique[accounts.email|matches[email2]|valid_email');
+      $this->form_validation->set_rules('email1', 'email', 'required|max_length[128]|is_unique[accounts.email]|matches[email2]|valid_email');
       $this->form_validation->set_rules('password1', 'password', 'required|matches[password2]|min_length[8]');
 
       if($this->form_validation->run() === true) {
@@ -74,15 +74,15 @@ class System extends CI_Controller {
     $this->load->view('sys/header', $data);
     $this->load->view('sys/signin');
     $this->load->view('sys/footer');
-  } 
-  
+  }
+
   public function logout() {
     $this->input->set_cookie('aid', '', 0);
     $this->session->sess_destroy();
     $this->load->helper('url');
     redirect('/');
   }
-  
+
   public function forgot() {
     $data = array();
     if($_POST) {
@@ -153,10 +153,10 @@ class System extends CI_Controller {
     $this->load->view('sys/reset');
     $this->load->view('sys/footer');
   }
-  
+
   public function activate($code) {
     $data = array();
-    
+
     if($this->accounts->activate($code)) {
       $this->session->set_flashdata('msg_type', 's');
       $this->session->set_flashdata('msg_text', 'Your account is activated and you can now sign in!');
