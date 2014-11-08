@@ -123,7 +123,7 @@ class System extends CI_Controller {
       }
     }
 
-    $this->load->view('sys/header');
+    $this->load->view('sys/header', $data);
     $this->load->view('sys/forgot');
     $this->load->view('sys/footer');
   }
