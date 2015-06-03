@@ -114,7 +114,7 @@ class System extends CI_Controller {
           $data['msg_type'] = 's';
           $data['msg_text'] = 'Please check your email to complete the process!';
         } else {
-          $$data['msg_type'] = 'e';
+          $data['msg_type'] = 'e';
           $data['msg_text'] = 'Internal error. Please try again later!';
         }
       } else {
