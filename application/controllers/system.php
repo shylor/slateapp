@@ -17,10 +17,11 @@ class System extends CI_Controller {
           $this->load->helper('url');
 
           $email = array(
-            'base_url' => base_url(),
+            'base_url'     => base_url(),
             'project_name' => $this->config->item('project_name'),
-            'project_team' => $this->config->item('project_team'),
-            'email_code' => $email_code
+            'email_team'   => $this->config->item('email_team'),
+            'email_name'   => $this->config->item('email_name'),
+            'email_code'   => $email_code
           );
 
           $this->email->from($this->config->item('email_address'), $this->config->item('email_name'));
@@ -97,10 +98,11 @@ class System extends CI_Controller {
           $this->load->helper('url');
 
           $email = array(
-            'base_url' => base_url(),
+            'base_url'     => base_url(),
             'project_name' => $this->config->item('project_name'),
-            'project_team' => $this->config->item('project_team'),
-            'email_code' => $email_code
+            'email_team'   => $this->config->item('email_team'),
+            'email_name'   => $this->config->item('email_name'),
+            'email_code'   => $email_code
           );
 
           $this->email->from($this->config->item('email_address'), $this->config->item('email_name'));

@@ -5,5 +5,5 @@
 </p>
 <p>
   Thank you,<br>
-  <strong><?php echo $project_team ?></strong>
+  <strong><?php echo $email_team ?></strong>
 </p>
